@@ -1,0 +1,58 @@
+{
+  "name": "proxyscotch",
+  "description": "Unofficial proxy server for https://hoppscotch.io",
+  "version": "1.0.0",
+  "main": "dist/electron/main.js",
+  "scripts": {
+    "build": "rm -rf dist && tsc --project ./tsconfig.build.json",
+    "electron:build": "tsc --project ./tsconfig.electron.json",
+    "electron:package": "yarn electron:build && electron-builder",
+    "docker:build": "docker build -t proxyscotch:latest -f Dockerfile ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/asomethings/proxyscotch.git"
+  },
+  "author": "asomethings <asomethings@kakao.com> (http://asomethings.com/)",
+  "license": "MIT",
+  "devDependencies": {
+    "@commitlint/cli": "^9.1.2",
+    "@commitlint/config-conventional": "^9.1.2",
+    "@types/node": "^14.6.3",
+    "@types/yargs": "^15.0.5",
+    "electron": "^10.1.1",
+    "electron-builder": "^22.8.0",
+    "eslint": "^7.8.1",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "husky": "^4.2.5",
+    "prettier": "^2.1.1",
+    "typescript": "^4.0.2"
+  },
+  "dependencies": {
+    "yargs": "^15.4.1"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "build": {
+    "appId": "com.asomethings.proxyscotch",
+    "directories": {
+      "output": "out"
+    },
+    "win": {
+      "target": "portable",
+      "icon": "icons/icon.ico"
+    },
+    "extraFiles": [
+      "icons/icon.png"
+    ]
+  }
+}
