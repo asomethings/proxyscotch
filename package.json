@@ -51,6 +51,12 @@
       "target": "portable",
       "icon": "icons/icon.ico"
     },
+    "linux": {
+      "icon": "icons/icon.png"
+    },
+    "mac": {
+      "icon": "icons/icon.png"
+    },
     "extraFiles": [
       "icons/icon.png"
     ]
