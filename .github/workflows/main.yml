@@ -1,0 +1,60 @@
+name: Build Proxyscotch
+
+on:
+  push:
+    tags:
+      - v[0-9]+.[0-9]+.[0-9]+
+
+env:
+  IMAGE_NAME: proxyscotch
+
+jobs:
+  build-docker:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - id: checkout
+        run: echo ::set-output name=version::${GITHUB_REF#refs/*/v}
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12'
+
+      - name: Log into GitHub Container Registry
+        run: echo $GITHUB_TOKEN | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+
+      - name: Build Docker Image
+        run: yarn docker:build
+
+      - id: image
+        run: echo ::set-output name=id::ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
+
+      - name: Tag Docker Image
+        run: |
+          docker tag proxyscotch:latest ${{ steps.image.outputs.id }}:latest
+          docker tag proxyscotch:latest ${{ steps.image.outputs.id }}:${{ steps.checkout.outputs.version }}
+
+      - name: Push Docker Image
+        run: |
+          docker push ${{ steps.image.outputs.id }}:latest
+          docker push ${{ steps.image.outputs.id }}:${{ steps.checkout.outputs.version }}
+
+  build-electron:
+    name: Build Executable With Electron
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build Using Docker
+        run: |
+          docker run --rm \
+            --env-file <(env | grep -iE 'DEBUG|NODE_|ELECTRON_|YARN_|NPM_|CI|CIRCLE|TRAVIS|APPVEYOR_|CSC_|_TOKEN|_KEY|AWS_|STRIP|BUILD_') \
+            -v ${PWD}:/project \
+            -v ~/.cache/electron:/root/.cache/electron \
+            -v ~/.cache/electron-builder:/root/.cache/electron-builder \
+            electronuserland/builder:wine \
+            /bin/bash -c "yarn && yarn electron:package --mac --linux --win --publish always"
