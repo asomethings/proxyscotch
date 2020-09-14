@@ -70,18 +70,18 @@ export const handler = (options: AppOptions) => async (
       json = await body(req)
     } catch (e) {
       return res
-        .writeHead(400)
+        .writeHead(400, headers)
         .end(JSON.stringify({ success: false, message: 'Bad Request' }))
     }
     if (!isRequestBody(json)) {
       return res
-        .writeHead(400)
+        .writeHead(400, headers)
         .end(JSON.stringify({ success: false, message: 'Bad Request' }))
     }
 
     if (options.token && json.accessToken != options.token) {
       return res
-        .writeHead(401)
+        .writeHead(400, headers)
         .end(
           JSON.stringify({ success: false, message: 'Unauthorized Request' })
         )
