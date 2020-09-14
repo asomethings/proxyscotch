@@ -1,4 +1,5 @@
 import { promises as fs } from 'fs'
+import { AppOptions } from './app'
 import { RequestBody } from './request'
 
 export const isRequestBody = (
@@ -29,4 +30,14 @@ export const getFile = async (path: string) => {
   } catch {
     return null
   }
+}
+
+export const isAllowedOrigin = (options: AppOptions = {}) => (
+  origin: string
+) => {
+  if (origin === '*') {
+    return true
+  }
+
+  return (options.allowedOrigins ?? []).includes(origin)
 }

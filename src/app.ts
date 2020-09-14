@@ -3,7 +3,7 @@ import * as https from 'https'
 import { body } from './body'
 import { registerLogger } from './logger'
 import { ProxyClient } from './proxy/client'
-import { getFile, isRequestBody } from './utils'
+import { getFile, isAllowedOrigin, isRequestBody } from './utils'
 
 export interface AppOptions {
   token?: string
@@ -44,7 +44,8 @@ export const handler = (options: AppOptions) => async (
     const headers: Record<string, any> = { 'Access-Control-Allow-Headers': '*' }
 
     const origin = req.headers['origin']
-    if (!origin || origin === '') {
+
+    if (!origin || !isAllowedOrigin(options)(origin)) {
       if ((req.headers['content-type'] || '').includes('application/json')) {
         return res
           .writeHead(200, {
