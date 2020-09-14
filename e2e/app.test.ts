@@ -1,6 +1,5 @@
 import * as http from 'http'
 import * as https from 'https'
-import * as ip from 'ip'
 import supertest from 'supertest'
 import { App } from '../src/app'
 
@@ -9,7 +8,7 @@ describe('App', () => {
   let port: number
   let app: http.Server | https.Server
   const allowedOrigins = ['https://hoppscotch.io']
-  const bannedOutputs = [ip.address()]
+  const bannedOutputs = ['Proxyscotch']
 
   beforeAll(async () => {
     port = Math.floor(Math.random() * 65535) + 1
@@ -121,7 +120,7 @@ describe('App', () => {
       data: expect.any(String),
       isBinary: true,
     })
-    const data = new Buffer(res.body.data, 'base64').toString('utf8')
+    const data = Buffer.from(res.body.data, 'base64').toString('utf8')
     expect(() => JSON.parse(data)).not.toThrow()
     expect(JSON.parse(data)).toBeInstanceOf(Object)
   })
