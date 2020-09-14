@@ -1,0 +1,33 @@
+name: Test
+
+on:
+  push:
+    paths:
+      - '**.ts'
+      - 'package.json'
+      - 'yarn.lock'
+      - 'assets/**'
+      - 'build/**'
+      - 'tsconfig.*.json'
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: Install Dependencies
+        run: yarn
+
+      - name: Run Tests
+        run: yarn test:types && yarn test:jest
