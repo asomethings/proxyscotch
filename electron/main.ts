@@ -23,7 +23,7 @@ const start = async () => {
   const server = await main()
 
   //* Configure Tray Icon
-  tray = new Tray('icons/icon.png')
+  tray = new Tray('assets/tray-icon.png')
   tray.setToolTip('Proxyscotch is running')
   const menu = Menu.buildFromTemplate([
     {

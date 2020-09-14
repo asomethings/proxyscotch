@@ -47,21 +47,11 @@
     "directories": {
       "output": "out"
     },
-    "win": {
-      "target": "portable",
-      "icon": "icons/icon.ico"
-    },
-    "linux": {
-      "icon": "icons/icon.png"
-    },
-    "mac": {
-      "icon": "icons/icon.png"
-    },
     "files": [
       "dist/**"
     ],
     "extraFiles": [
-      "icons/icon.png"
+      "assets/tray-icon.png"
     ],
     "publish": {
       "provider": "github",
