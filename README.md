@@ -58,8 +58,8 @@ Configurations are all optional
 
 `node dist/main.js ssl --key --cert`
 
-- `key` - SSL key file location
-- `cert` - SSL cert file location
+- `key` - SSL key file location OR SSL Key
+- `cert` - SSL cert file location OR SSL Cert
 
 ## Why I'm Building This 🤔
 
