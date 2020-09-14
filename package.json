@@ -57,8 +57,15 @@
     "mac": {
       "icon": "icons/icon.png"
     },
+    "files": [
+      "dist/**"
+    ],
     "extraFiles": [
       "icons/icon.png"
-    ]
+    ],
+    "publish": {
+      "provider": "github",
+      "releaseType": "release"
+    }
   }
 }
