@@ -111,7 +111,9 @@ export const handler = (options: AppOptions) => async (
   return res.writeHead(404).end()
 }
 
-export const App = async (options?: AppOptions) => {
+export const App = async (
+  options?: AppOptions
+): Promise<http.Server | https.Server> => {
   const host = options?.host ?? '0.0.0.0'
   const port = options?.port ?? 80
 
@@ -132,7 +134,10 @@ export const App = async (options?: AppOptions) => {
     server = http.createServer(listener)
   }
 
-  return server.listen(port, host, () => {
-    console.log(`Starting server on ${host}:${port}`)
+  return new Promise((resolve) => {
+    server.listen(port, host, () => {
+      console.log(`Starting server on ${host}:${port}`)
+      resolve(server)
+    })
   })
 }
