@@ -7,7 +7,9 @@
     "build": "rm -rf dist && tsc --project ./tsconfig.build.json",
     "electron:build": "tsc --project ./tsconfig.electron.json",
     "electron:package": "yarn electron:build && electron-builder",
-    "docker:build": "docker build -t proxyscotch:latest -f Dockerfile ."
+    "docker:build": "docker build -t proxyscotch:latest -f Dockerfile .",
+    "test:jest": "jest",
+    "test:types": "tsc --project ./tsconfig.build.json --noEmit && tsc --project ./tsconfig.electron.json --noEmit"
   },
   "repository": {
     "type": "git",
