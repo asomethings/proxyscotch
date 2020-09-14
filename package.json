@@ -56,6 +56,16 @@
     "publish": {
       "provider": "github",
       "releaseType": "release"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis-web"
+        },
+        {
+          "target": "portable"
+        }
+      ]
     }
   }
 }
