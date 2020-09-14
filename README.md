@@ -1,5 +1,7 @@
 # Proxyscotch
 
+![Release](https://github.com/asomethings/proxyscotch/workflows/Release/badge.svg)
+
 A proxy server for [Hoppscotch](https://github.com/hoppscotch/hoppscotch/). Works same as original [Proxyscotch](https://github.com/hoppscotch/proxyscotch), but based on Node.js/Typescript.
 
 We only use yargs as dependencies to increase performance and lower file size.
