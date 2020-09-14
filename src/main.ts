@@ -44,8 +44,8 @@ export const main = () => {
     allowedOrigins: argv['allowed-origins'],
     bannedOutputs: argv['banned-outputs'],
     ssl: {
-      keyFileName: argv.key,
-      certFileName: argv.cert,
+      key: argv.key,
+      cert: argv.cert,
     },
   })
 }

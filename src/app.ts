@@ -18,8 +18,8 @@ export interface AppOptions {
   bannedOutputs?: string[]
 
   ssl?: {
-    keyFileName: string
-    certFileName: string
+    key: string
+    cert: string
   }
 }
 
@@ -118,11 +118,11 @@ export const App = async (options?: AppOptions) => {
   const listener = handler(options ?? {})
 
   let server: http.Server | https.Server
-  if (options?.ssl && options.ssl.keyFileName && options.ssl.certFileName) {
+  if (options?.ssl && options.ssl.key && options.ssl.cert) {
     server = https.createServer(
       {
-        key: await fs.readFile(options.ssl.keyFileName),
-        cert: await fs.readFile(options.ssl.certFileName),
+        key: await fs.readFile(options.ssl.key),
+        cert: await fs.readFile(options.ssl.cert),
       },
       listener
     )
