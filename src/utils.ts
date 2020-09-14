@@ -1,3 +1,4 @@
+import { promises as fs } from 'fs'
 import { RequestBody } from './request'
 
 export const isRequestBody = (
@@ -20,4 +21,12 @@ export const stripNewLine = (buffer: Buffer) => {
   }
 
   return result
+}
+
+export const getFile = async (path: string) => {
+  try {
+    return await fs.readFile(path)
+  } catch {
+    return null
+  }
 }

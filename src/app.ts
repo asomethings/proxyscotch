@@ -1,10 +1,9 @@
-import { promises as fs } from 'fs'
 import * as http from 'http'
 import * as https from 'https'
 import { body } from './body'
 import { registerLogger } from './logger'
 import { ProxyClient } from './proxy/client'
-import { isRequestBody } from './utils'
+import { getFile, isRequestBody } from './utils'
 
 export interface AppOptions {
   token?: string
@@ -115,14 +114,17 @@ export const handler = (options: AppOptions) => async (
 export const App = async (options?: AppOptions) => {
   const host = options?.host ?? '0.0.0.0'
   const port = options?.port ?? 80
-  const listener = handler(options ?? {})
 
+  const listener = handler(options ?? {})
   let server: http.Server | https.Server
   if (options?.ssl && options.ssl.key && options.ssl.cert) {
+    const cert = (await getFile(options.ssl.cert)) ?? options.ssl.cert
+    const key = (await getFile(options.ssl.key)) ?? options.ssl.key
+
     server = https.createServer(
       {
-        key: await fs.readFile(options.ssl.key),
-        cert: await fs.readFile(options.ssl.cert),
+        key: key,
+        cert: cert,
       },
       listener
     )
