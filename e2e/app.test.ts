@@ -6,21 +6,24 @@ import { App } from '../src/app'
 describe('App', () => {
   const host = '127.0.0.1'
   let port: number
-  let app: http.Server | https.Server
+  let server: http.Server | https.Server
   const allowedOrigins = ['https://hoppscotch.io']
   const bannedOutputs = ['Proxyscotch']
 
   beforeAll(async () => {
     port = Math.floor(Math.random() * 65535) + 1
-    app = await App({ host, port, allowedOrigins, bannedOutputs })
+    const app = new App({ host, port, allowedOrigins, bannedOutputs })
+    server = await app.listen()
   })
 
   test('Host and port parse', async () => {
-    expect(app.address()).toMatchObject({ address: host, port })
+    expect(server.address()).toMatchObject({ address: host, port })
   })
 
   test('Allowed origins', async () => {
-    const res = await supertest(app).post('').set({ origin: allowedOrigins[0] })
+    const res = await supertest(server)
+      .post('')
+      .set({ origin: allowedOrigins[0] })
 
     expect(res.status).toBe(400)
     expect(res.body).toEqual({ success: false, message: 'Bad Request' })
@@ -32,7 +35,7 @@ describe('App', () => {
   })
 
   test('Not allowed origin without json content-type', async () => {
-    const res = await supertest(app)
+    const res = await supertest(server)
       .post('')
       .set({ origin: 'https://github.com' })
 
@@ -44,7 +47,7 @@ describe('App', () => {
   })
 
   test('Not allowed origin with json content-type', async () => {
-    const res = await supertest(app)
+    const res = await supertest(server)
       .post('')
       .set({ origin: 'https://github.com', 'content-type': 'application/json' })
 
@@ -56,7 +59,7 @@ describe('App', () => {
   })
 
   test('Replace banned outputs', async () => {
-    const res = await supertest(app)
+    const res = await supertest(server)
       .post('')
       .set({ origin: '*', 'content-type': 'application/json' })
       .send({
@@ -72,7 +75,7 @@ describe('App', () => {
   })
 
   test('OPTIONS method', async () => {
-    const res = await supertest(app).options('')
+    const res = await supertest(server).options('')
 
     expect(res.status).toBe(200)
     expect(res.headers).toMatchObject({
@@ -82,7 +85,7 @@ describe('App', () => {
   })
 
   test('Post method (wantsBinary = false)', async () => {
-    const res = await supertest(app)
+    const res = await supertest(server)
       .post('')
       .set({ origin: '*', 'content-type': 'application/json' })
       .send({
@@ -103,7 +106,7 @@ describe('App', () => {
   })
 
   test('Post method (wantsBinary = true)', async () => {
-    const res = await supertest(app)
+    const res = await supertest(server)
       .post('')
       .set({ origin: '*', 'content-type': 'application/json' })
       .send({
@@ -126,6 +129,6 @@ describe('App', () => {
   })
 
   afterAll(() => {
-    app && app.close()
+    server && server.close()
   })
 })

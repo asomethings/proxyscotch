@@ -1,13 +1,3 @@
-import { promises as fs } from 'fs'
-import { AppOptions } from './app'
-import { RequestBody } from './request'
-
-export const isRequestBody = (
-  body: RequestBody | Record<string, any>
-): body is RequestBody => {
-  return 'url' in body && 'method' in body
-}
-
 export const stripNewLine = (buffer: Buffer) => {
   const LF = '\n'.charCodeAt(0)
   const CR = '\r'.charCodeAt(0)
@@ -22,22 +12,4 @@ export const stripNewLine = (buffer: Buffer) => {
   }
 
   return result
-}
-
-export const getFile = async (path: string) => {
-  try {
-    return await fs.readFile(path)
-  } catch {
-    return null
-  }
-}
-
-export const isAllowedOrigin = (options: AppOptions = {}) => (
-  origin: string
-) => {
-  if (origin === '*') {
-    return true
-  }
-
-  return (options.allowedOrigins ?? []).includes(origin)
 }

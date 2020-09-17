@@ -37,7 +37,7 @@ export const main = () => {
     .version()
     .help().argv
 
-  return App({
+  const app = new App({
     token: argv.token,
     host: argv.host,
     port: argv.port,
@@ -48,6 +48,8 @@ export const main = () => {
       cert: argv.cert,
     },
   })
+
+  return app.listen()
 }
 
 if (require.main === module) {

@@ -1,8 +1,9 @@
 import * as http from 'http'
 import * as https from 'https'
-import { RequestBody } from '../request'
+import { RequestBody } from '../interfaces/request-body'
 import { ProxyMessage } from './message'
 
+// TODO: Implement HTTP/2 protocol requests. Including ALPN Negotiation
 export class ProxyClient {
   private readonly options: https.RequestOptions
 

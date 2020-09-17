@@ -1,7 +1,7 @@
 import * as http from 'http'
 import { bufferReplace } from '../buffer-replace'
+import { ProxyResponse } from '../interfaces/response/proxy-response'
 import { stripNewLine } from '../utils'
-import { ProxyResponse } from './response'
 
 export class ProxyMessage {
   private _body?: string
@@ -52,6 +52,7 @@ export class ProxyMessage {
 
   public response(): ProxyResponse {
     return {
+      success: true,
       status: this.status,
       statusText: this.statusText,
       headers: this.headers,

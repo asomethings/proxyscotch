@@ -1,4 +1,6 @@
-export interface ProxyResponse {
+import { BaseResponse } from './base-response'
+
+export interface ProxyResponse extends BaseResponse {
   status: number
 
   statusText: string
