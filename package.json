@@ -2,11 +2,11 @@
   "name": "proxyscotch",
   "description": "Unofficial proxy server for https://hoppscotch.io",
   "version": "1.0.0",
-  "main": "dist/electron/main.js",
+  "main": "dist/main.js",
+  "bin": "dist/main.js",
   "scripts": {
     "build": "rm -rf dist && tsc --project ./tsconfig.build.json",
-    "electron:build": "tsc --project ./tsconfig.electron.json",
-    "electron:package": "yarn electron:build && electron-builder",
+    "pkg": "pkg . --out-path binaries",
     "docker:build": "docker build -t proxyscotch:latest -f Dockerfile .",
     "test:jest": "jest",
     "test:types": "tsc --project ./tsconfig.build.json --noEmit && tsc --project ./tsconfig.electron.json --noEmit"
@@ -32,6 +32,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "husky": "^4.2.5",
     "jest": "^26.4.2",
+    "pkg": "^4.4.9",
     "prettier": "^2.1.1",
     "supertest": "^4.0.2",
     "ts-jest": "^26.3.0",
@@ -75,5 +76,8 @@
         }
       ]
     }
+  },
+  "pkg": {
+    "scripts": "dist/**/*.js"
   }
 }
