@@ -23,6 +23,7 @@ coverage
 ###################
 *.log
 dist
+binaries
 
 
 #       pnpm      #

@@ -44,13 +44,9 @@ jobs:
           docker push ${{ steps.image.outputs.id }}:${{ steps.checkout.outputs.version }}
 
   release:
-    name: Build Executable With Electron
+    name: Build Executable With pkg
 
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
@@ -59,15 +55,23 @@ jobs:
         with:
           node-version: '12'
 
-      - name: Install Snapcraft
-        uses: samuelmeuli/action-snapcraft@v1
-        if: startsWith(matrix.os, 'ubuntu')
-        with:
-          snapcraft_token: ${{ secrets.snapcraft_token }}
+      - name: Install Dependencies
+        run: yarn
 
-      - name: Build/Release App
-        uses: samuelmeuli/action-electron-builder@v1
-        with:
-          github_token: ${{ secrets.github_token }}
-          build_script_name: 'electron:build'
-          args: '--publish=always'
+      - name: Build Project
+        run: yarn build
+
+      - name: Create Binaries
+        run: yarn pkg
+
+      - name: Create Release & Upload Assets
+        run: |
+          set -x
+          assets=()
+          for asset in ./binaries/*; do
+            assets+=("-a" "$asset")
+          done
+          tag_name="${GITHUB_REF##*/}"
+          hub release create "${assets[@]}" -m "$tag_name" "$tag_name"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
