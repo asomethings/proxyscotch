@@ -1,9 +1,9 @@
 FROM node:lts-stretch-slim as build
 
 WORKDIR /app
-COPY . /app
+COPY package.json yarn.lock /app/
 
-RUN yarn && yarn build
+RUN yarn
 # --- 
 
 FROM node:lts-stretch-slim
@@ -11,5 +11,9 @@ WORKDIR /app
 
 EXPOSE 80
 COPY --from=build /app /app
+COPY src /app/src
+COPY  tsconfig.json tsconfig.build.json /app/
 
-CMD ["node", "dist/main"]
+RUN yarn build
+
+ENTRYPOINT ["node", "dist/main.js"]
