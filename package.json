@@ -9,7 +9,7 @@
     "pkg": "pkg . --out-path binaries",
     "docker:build": "docker build -t proxyscotch:latest -f Dockerfile .",
     "test:jest": "jest",
-    "test:types": "tsc --project ./tsconfig.build.json --noEmit && tsc --project ./tsconfig.electron.json --noEmit"
+    "test:types": "tsc --project ./tsconfig.build.json --noEmit"
   },
   "repository": {
     "type": "git",
@@ -51,33 +51,11 @@
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
-  "build": {
-    "appId": "com.asomethings.proxyscotch",
-    "directories": {
-      "output": "out"
-    },
-    "files": [
-      "dist/**"
-    ],
-    "extraFiles": [
-      "assets/tray-icon.png"
-    ],
-    "publish": {
-      "provider": "github",
-      "releaseType": "release"
-    },
-    "win": {
-      "target": [
-        {
-          "target": "nsis-web"
-        },
-        {
-          "target": "portable"
-        }
-      ]
-    }
-  },
   "pkg": {
     "scripts": "dist/**/*.js"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
   }
 }
