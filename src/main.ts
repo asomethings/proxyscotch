@@ -1,3 +1,4 @@
+import * as fs from 'fs'
 import * as yargs from 'yargs'
 import { App } from './app'
 
@@ -33,6 +34,9 @@ export const main = () => {
         .option('key', { type: 'string', demandOption: true })
         .option('cert', { type: 'string', demandOption: true })
         .option('passphrase', { type: 'string', demandOption: false })
+    })
+    .config('config', (configPath: string) => {
+      return JSON.parse(fs.readFileSync(configPath, 'utf-8'))
     })
     .version()
     .help().argv
