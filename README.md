@@ -37,11 +37,9 @@ docker run asomethings/proxyscotch:latest -p 80:80
 3. Build using `yarn build`
 4. Run server `node dist/main.js`
 
-### Binary (Electron)
+### Binary (pkg)
 
-3. Build using `yarn electron:build`
-4. Package using `yarn electron:package`
-5. Publish using `yarn electron:publish`
+3. Create Pacakge `yarn pkg`
 
 ## Configurations
 
