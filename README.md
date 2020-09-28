@@ -70,7 +70,7 @@ I acknowledge that original [Proxyscotch](https://github.com/hoppscotch/proxysco
 
 Below tasks are ordered in priority.
 
-- [ ] Better App Configuration (Electron)
+- [ ] <strike>Better App Configuration (Electron)</strike> Since Electron was replaced with pkg this task is removed
 - [ ] HTTP/2
 - [ ] Websocket
 - [ ] Server Sent Events
