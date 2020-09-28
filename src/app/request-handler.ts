@@ -11,8 +11,8 @@ export class RequestHandler {
 
   constructor(
     private readonly app: App,
-    private readonly req: http.IncomingMessage,
-    private readonly res: http.ServerResponse
+    private readonly req: HttpRequest,
+    private readonly res: HttpResponse
   ) {}
 
   public async response(): Promise<void> {

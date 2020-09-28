@@ -1,12 +1,10 @@
-import * as http from 'http'
-import * as https from 'https'
 import supertest from 'supertest'
 import { App } from '../src/app'
 
 describe('App', () => {
   const host = '127.0.0.1'
   let port: number
-  let server: http.Server | https.Server
+  let server: HttpServer
   const allowedOrigins = ['https://hoppscotch.io']
   const bannedOutputs = ['Proxyscotch']
 

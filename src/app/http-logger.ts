@@ -1,16 +1,13 @@
-import * as http from 'http'
-
 export class HttpLogger {
   private readonly start: number
 
   constructor(
-    private readonly req: http.IncomingMessage,
-    private readonly res: http.ServerResponse
+    private readonly req: HttpRequest,
+    private readonly res: HttpResponse
   ) {
     this.start = this.now()
-    res.on('finish', this.finish)
-    res.on('error', this.finish)
-    res.removeAllListeners()
+    res.on('finish', this.finish.bind(this))
+    res.on('error', this.finish.bind(this))
   }
 
   private finish(): void {
@@ -41,7 +38,9 @@ export class HttpLogger {
   }
 
   private get statusCode(): string {
-    return String(this.req.statusCode ?? undefined)
+    return String(
+      'statusCode' in this.req ? this.req.statusCode : this.res.statusCode
+    )
   }
 
   private now(): number {

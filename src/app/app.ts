@@ -1,18 +1,19 @@
 import { promises as fs } from 'fs'
 import * as http from 'http'
+import * as http2 from 'http2'
 import * as https from 'https'
 import { AppOptions } from '../interfaces/app-options'
 import { Listener } from './listener'
 
 export class App {
-  private _server?: https.Server | http.Server
+  private _server?: HttpServer
   private listener: Listener
 
   constructor(private readonly options: AppOptions) {
     this.listener = new Listener(this)
   }
 
-  public async listen(): Promise<https.Server | http.Server> {
+  public async listen(): Promise<HttpServer> {
     const server = await this.server()
     return new Promise((resolve) => {
       server.listen(this.port, this.host, () => {
@@ -23,9 +24,9 @@ export class App {
   }
 
   /**
-   * @returns {Promise<http.Server | https.Server>}
+   * @returns {Promise<HttpServer>}
    */
-  public async server(): Promise<http.Server | https.Server> {
+  public async server(): Promise<HttpServer> {
     if (!this._server) {
       this._server = await this.createServer()
     }
@@ -101,27 +102,22 @@ export class App {
   }
 
   /**
-   * @returns {typeof http | typeof https}
+   * @returns {Promise<HttpServer>}
    */
-  private get client(): typeof http | typeof https {
-    if (!this.isSSL) return http
+  private async createServer(): Promise<HttpServer> {
+    const listener = this.listener.handle.bind(this.listener)
+    if (this.isSSL) {
+      return http2.createSecureServer(
+        {
+          key: await this.getSSLKey(),
+          cert: await this.getSSLCert(),
+          allowHTTP1: true,
+        },
+        listener
+      )
+    }
 
-    return http
-  }
-
-  /**
-   * @returns {Promise<http.Server | https.Server>}
-   */
-  private async createServer(): Promise<http.Server | https.Server> {
-    if (!this.isSSL) return this.client.createServer(this.listener.handle())
-
-    return this.client.createServer(
-      {
-        key: await this.getSSLKey(),
-        cert: await this.getSSLCert(),
-      },
-      this.listener.handle()
-    )
+    return http.createServer(listener)
   }
 
   /**

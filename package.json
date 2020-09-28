@@ -5,11 +5,11 @@
   "main": "dist/main.js",
   "bin": "dist/main.js",
   "scripts": {
-    "build": "rm -rf dist && tsc --project ./tsconfig.json",
+    "build": "rm -rf dist && tsc --project ./tsconfig.build.json",
     "pkg": "pkg . --out-path binaries",
     "docker:build": "docker build -t proxyscotch:latest -f Dockerfile .",
     "test:jest": "jest",
-    "test:types": "tsc --project ./tsconfig.json --noEmit"
+    "test:types": "tsc --project ./tsconfig.build.json --noEmit"
   },
   "repository": {
     "type": "git",
