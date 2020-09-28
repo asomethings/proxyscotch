@@ -12,7 +12,7 @@ WORKDIR /app
 EXPOSE 80
 COPY --from=build /app /app
 COPY src /app/src
-COPY  tsconfig.json tsconfig.build.json /app/
+COPY  tsconfig.json /app/
 
 RUN yarn build
 
