@@ -34,13 +34,6 @@ export class App {
   }
 
   /**
-   * @returns {boolean}
-   */
-  public get listening(): boolean {
-    return !!(this._server && this._server.listening)
-  }
-
-  /**
    * @returns {string}
    */
   public get host(): string {
