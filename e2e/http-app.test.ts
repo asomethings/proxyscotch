@@ -126,6 +126,71 @@ describe('Http App', () => {
     expect(JSON.parse(data)).toBeInstanceOf(Object)
   })
 
+  test('Post method with JSON body', async () => {
+    const res = await supertest(server)
+      .post('')
+      .set({ origin: '*', 'content-type': 'application/json' })
+      .send({
+        url: 'http://httpbin.org/post',
+        method: 'POST',
+        wantsBinary: true,
+        data: {
+          data: true,
+        },
+      })
+
+    expect(res.status).toBe(200)
+    expect(res.body).toMatchObject({
+      status: 200,
+      statusText: 'OK',
+      headers: expect.any(Object),
+      data: expect.any(String),
+      isBinary: true,
+    })
+    const data = Buffer.from(res.body.data, 'base64').toString('utf8')
+    expect(() => JSON.parse(data)).not.toThrow()
+    expect(JSON.parse(data)).toBeInstanceOf(Object)
+  })
+
+  test('Post method with string body', async () => {
+    const res = await supertest(server)
+      .post('')
+      .set({ origin: '*', 'content-type': 'application/json' })
+      .send({
+        url: 'http://httpbin.org/post',
+        method: 'POST',
+        wantsBinary: true,
+        data: JSON.stringify({
+          data: true,
+        }),
+      })
+
+    expect(res.status).toBe(200)
+    expect(res.body).toMatchObject({
+      status: 200,
+      statusText: 'OK',
+      headers: expect.any(Object),
+      data: expect.any(String),
+      isBinary: true,
+    })
+    const data = Buffer.from(res.body.data, 'base64').toString('utf8')
+    expect(() => JSON.parse(data)).not.toThrow()
+    expect(JSON.parse(data)).toBeInstanceOf(Object)
+  })
+
+  test('Post method with wrong url', async () => {
+    const res = await supertest(server)
+      .post('/')
+      .set({ origin: '*', 'content-type': 'application/json' })
+      .send({
+        url: 'https://www.example.com:8800',
+        method: 'POST',
+        wantsBinary: true,
+      })
+
+    expect(res.status).toBe(500)
+  })
+
   afterAll(() => {
     server && server.close()
   })
