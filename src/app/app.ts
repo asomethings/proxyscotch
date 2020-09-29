@@ -1,7 +1,6 @@
 import { promises as fs } from 'fs'
 import * as http from 'http'
 import * as http2 from 'http2'
-import * as https from 'https'
 import { AppOptions } from '../interfaces/app-options'
 import { Listener } from './listener'
 
@@ -126,7 +125,7 @@ export class App {
    */
   private async readFile(path: string): Promise<string | null> {
     try {
-      return fs.readFile(path, { encoding: 'utf8', flag: 'r' })
+      return await fs.readFile(path, { encoding: 'utf8', flag: 'r' })
     } catch {
       return null
     }

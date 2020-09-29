@@ -6,9 +6,8 @@ export class Listener {
   constructor(private readonly app: App) {}
 
   public async handle(req: HttpRequest, res: HttpResponse) {
-    const logger = new HttpLogger(req, res)
+    HttpLogger.register(req, res)
     const requestHandler = new RequestHandler(this.app, req, res)
     await requestHandler.response()
-    logger.removeAllListener()
   }
 }

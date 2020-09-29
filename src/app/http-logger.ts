@@ -1,13 +1,21 @@
 export class HttpLogger {
   private readonly start: number
+  private readonly remoteAddress?: string
+  private readonly method?: string
+  private readonly url?: string
 
   constructor(
     private readonly req: HttpRequest,
     private readonly res: HttpResponse
   ) {
     this.start = this.now()
-    res.on('finish', this.finish.bind(this))
+
+    this.url = `"${this.req.url}"`
+    this.method = this.req.method
+    this.remoteAddress = this.req.connection.remoteAddress
+
     res.on('error', this.finish.bind(this))
+    res.on('finish', this.finish.bind(this))
   }
 
   private finish(): void {
@@ -21,26 +29,12 @@ export class HttpLogger {
     return String((this.now() - this.start).toFixed(3)) + 'ms'
   }
 
-  private get remoteAddress(): string {
-    return String(this.req.connection.remoteAddress ?? undefined)
-  }
-
-  private get method(): string {
-    return String(this.req.method ?? undefined)
-  }
-
-  private get url(): string {
-    return `"${String(this.req.url ?? undefined)}"`
-  }
-
   private get httpVersion(): string {
     return `HTTP/${this.req.httpVersion}`
   }
 
   private get statusCode(): string {
-    return String(
-      'statusCode' in this.req ? this.req.statusCode : this.res.statusCode
-    )
+    return String(this.res.statusCode)
   }
 
   private now(): number {
@@ -48,7 +42,7 @@ export class HttpLogger {
     return ts[0] * 1e3 + ts[1] / 1e6
   }
 
-  public removeAllListener() {
-    this.res.removeAllListeners()
+  public static register(req: HttpRequest, res: HttpResponse): HttpLogger {
+    return new HttpLogger(req, res)
   }
 }
