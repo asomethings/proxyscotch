@@ -1,8 +1,8 @@
 # Proxyscotch
 
-![Test](https://github.com/asomethings/proxyscotch/workflows/Test/badge.svg)
-![Release](https://github.com/asomethings/proxyscotch/workflows/Release/badge.svg)
-![codecov](https://codecov.io/gh/asomethings/proxyscotch/branch/master/graph/badge.svg?token=ZDASQ1JMG3)
+[![Test][test-badge]][test]
+[![Release][release-badge]][release]
+[![codecov][codecov-badge]][codecov]
 
 A proxy server for [Hoppscotch](https://github.com/hoppscotch/hoppscotch/). Works same as original [Proxyscotch](https://github.com/hoppscotch/proxyscotch), but based on Node.js/Typescript.
 
@@ -76,3 +76,10 @@ Below tasks are ordered in priority.
 - [ ] Server Sent Events
 - [ ] Socket.IO
 - [ ] MQTT
+
+[codecov-badge]: https://codecov.io/gh/asomethings/proxyscotch/branch/master/graph/badge.svg?token=ZDASQ1JMG3
+[codecov]: https://codecov.io/gh/asomethings/proxyscotch
+[test-badge]: https://github.com/asomethings/proxyscotch/workflows/Test/badge.svg
+[test]: https://github.com/asomethings/proxyscotch/actions?query=workflow%3ATest
+[release-badge]: https://github.com/asomethings/proxyscotch/workflows/Release/badge.svg
+[release]: https://github.com/asomethings/proxyscotch/actions?query=workflow%3ARelease
