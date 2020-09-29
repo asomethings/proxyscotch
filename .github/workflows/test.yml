@@ -31,3 +31,9 @@ jobs:
 
       - name: Run Tests
         run: yarn test:types && yarn test:jest
+
+      - name: Upload to codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
