@@ -2,6 +2,7 @@
 
 ![Test](https://github.com/asomethings/proxyscotch/workflows/Test/badge.svg)
 ![Release](https://github.com/asomethings/proxyscotch/workflows/Release/badge.svg)
+![codecov](https://codecov.io/gh/asomethings/proxyscotch/branch/master/graph/badge.svg?token=ZDASQ1JMG3)
 
 A proxy server for [Hoppscotch](https://github.com/hoppscotch/hoppscotch/). Works same as original [Proxyscotch](https://github.com/hoppscotch/proxyscotch), but based on Node.js/Typescript.
 
