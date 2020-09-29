@@ -53,13 +53,14 @@ Configurations are all optional
 - `port` - Port number of server
 - `allowed-origins` - Allowed origins of request
 - `banned-outputs` - Banned string that wants to be filtered
+- `config` Config file path in JSON
 
 ### SSL (Including)
 
 `node dist/main.js ssl --key --cert`
 
-- `key` - SSL key file location OR SSL Key
-- `cert` - SSL cert file location OR SSL Cert
+- `key` - SSL key file path OR plain string
+- `cert` - SSL cert file path OR plain string
 
 ## Why I'm Building This 🤔
 
