@@ -1,7 +1,7 @@
 import supertest from 'supertest'
 import { App } from '../src/app'
 
-describe('App', () => {
+describe('Http App', () => {
   const host = '127.0.0.1'
   let port: number
   let server: HttpServer
