@@ -50,6 +50,10 @@ export class RequestHandler {
       return this.status(400).send({ success: false, message: 'Bad Request' })
     }
 
+    if (typeof body.data === 'object') {
+      body.data = JSON.stringify(body.data)
+    }
+
     if (this.app.token && this.app.token !== body.accessToken) {
       return this.status(401).send({
         success: false,
