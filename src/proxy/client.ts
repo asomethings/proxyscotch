@@ -10,6 +10,7 @@ export class ProxyClient {
   constructor(private readonly body: RequestBody) {
     this.options = {
       method: body.method,
+      timeout: 4500,
     }
 
     this.options.headers = {
@@ -43,6 +44,7 @@ export class ProxyClient {
       )
 
       req.on('error', reject)
+      req.on('timeout', req.abort)
 
       if (this.body.data) {
         req.write(this.body.data)
