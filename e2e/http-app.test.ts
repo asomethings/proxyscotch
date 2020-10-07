@@ -183,7 +183,7 @@ describe('Http App', () => {
       .post('/')
       .set({ origin: '*', 'content-type': 'application/json' })
       .send({
-        url: 'https://www.example.com:8800',
+        url: 'http://www.example.com:8800',
         method: 'POST',
         wantsBinary: true,
       })

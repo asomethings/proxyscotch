@@ -72,7 +72,7 @@ export class RequestHandler {
     const response = proxyMessage
       .wantsBinary(body.wantsBinary)
       .bannedOutputs(...this.app.bannedOutputs)
-      .response()
+      .json()
 
     return this.status(200).send(response)
   }

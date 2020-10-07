@@ -1,4 +1,4 @@
-import * as http from 'http'
+import { Response } from 'got'
 import { bufferReplace } from '../buffer-replace'
 import { ProxyResponse } from '../interfaces/response/proxy-response'
 import { stripNewLine } from '../utils'
@@ -8,22 +8,7 @@ export class ProxyMessage {
   private _bannedOutputs: string[] = []
   private _wantsBinary: boolean = false
 
-  constructor(
-    private readonly incomingMessage: http.IncomingMessage,
-    private readonly buffer: Buffer
-  ) {}
-
-  public get status() {
-    return this.incomingMessage.statusCode ?? 500
-  }
-
-  public get statusText() {
-    return this.incomingMessage.statusMessage ?? 'Internal Server Error'
-  }
-
-  public get headers() {
-    return this.incomingMessage.headers
-  }
+  constructor(private readonly response: Response<Buffer>) {}
 
   public wantsBinary(value?: boolean): this {
     this._wantsBinary = value ?? false
@@ -37,9 +22,9 @@ export class ProxyMessage {
 
   public get body(): string {
     if (this._body) return this._body
-    let buffer = stripNewLine(this.buffer)
+    let buffer = stripNewLine(this.response.body)
     for (const bannedOutput of this._bannedOutputs) {
-      buffer = bufferReplace(this.buffer, bannedOutput, '[redacted]')
+      buffer = bufferReplace(this.response.body, bannedOutput, '[redacted]')
     }
 
     this._body = buffer.toString(this._wantsBinary ? 'base64' : 'utf8')
@@ -50,12 +35,12 @@ export class ProxyMessage {
       .replace(/\=+$/, '')
   }
 
-  public response(): ProxyResponse {
+  public json(): ProxyResponse {
     return {
       success: true,
-      status: this.status,
-      statusText: this.statusText,
-      headers: this.headers,
+      status: this.response.statusCode,
+      statusText: this.response.statusMessage ?? '',
+      headers: this.response.headers,
       isBinary: this._wantsBinary,
       data: this.body,
     }

@@ -1,69 +1,45 @@
-import * as http from 'http'
-import * as https from 'https'
+import got from 'got'
 import { RequestBody } from '../interfaces/request-body'
 import { ProxyMessage } from './message'
 
-// TODO: Implement HTTP/2 protocol requests. Including ALPN Negotiation
 export class ProxyClient {
-  private readonly options: https.RequestOptions
+  private readonly url: string
+  private readonly method: string
+  private readonly headers: Record<string, string>
+  private readonly body?: string
+  private readonly username?: string
+  private readonly password?: string
 
-  constructor(private readonly body: RequestBody) {
-    this.options = {
-      method: body.method,
-      timeout: 4500,
-    }
-
-    this.options.headers = {
-      ...(body.headers || {}),
+  constructor(options: RequestBody) {
+    this.method = options.method
+    this.url = options.url
+    this.headers = {
+      ...(options.headers || {}),
       'User-Agent': 'Proxyscotch/1.0',
     }
+    this.body = options.data
 
-    if (body.auth) {
-      this.options.auth = `${body.auth.username}:${body.auth.password}`
-    }
-
-    if (body.data) {
-      this.options.headers['Content-Length'] = Buffer.byteLength(body.data)
+    if (options.auth) {
+      this.username = options.auth.username
+      this.password = options.auth.password
     }
   }
 
-  private get request() {
-    if (this.body.url.startsWith('https')) {
-      return https.request
-    }
-
-    return http.request
-  }
-
-  public send(): Promise<ProxyMessage> {
-    return new Promise((resolve, reject) => {
-      const req = this.request(
-        this.body.url,
-        this.options,
-        this.callback(resolve)
-      )
-
-      req.on('error', reject)
-      req.on('timeout', req.abort)
-
-      if (this.body.data) {
-        req.write(this.body.data)
-      }
-
-      req.end()
+  public async send(): Promise<ProxyMessage> {
+    const response = await got(this.url, {
+      method: <any>this.method,
+      headers: this.headers,
+      body: this.body,
+      username: this.username,
+      password: this.password,
+      http2: true,
+      responseType: 'buffer',
+      timeout: 3000,
+      retry: {
+        limit: 0,
+      },
     })
-  }
 
-  private callback(resolve: (value: ProxyMessage) => void) {
-    return (res: http.IncomingMessage) => {
-      const buffer: Buffer[] = []
-      res
-        .on('data', (chunk: Buffer) => {
-          buffer.push(chunk)
-        })
-        .on('end', () => {
-          resolve(new ProxyMessage(res, Buffer.concat(buffer)))
-        })
-    }
+    return new ProxyMessage(response)
   }
 }
